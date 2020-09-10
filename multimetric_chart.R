@@ -3,17 +3,19 @@ library(dplyr)
 library(tidyr)
 library(highcharter)
 library(ggplot2)
+library(tidyr)
+library(dplyr)
 
 # DATA  #######################################################################
 # get some data about countries
-countries_data <- readr::read_csv('E:datasets_23752_30346_countries of the world.csv')
+countries_data <- readr::read_csv('f:/country_data.csv')
 
 # normalise and shape it for the chart
 countries_norm <- countries_data %>% 
   gather(metric, val, -c(Country, Region)) %>% 
   group_by(metric) %>% 
   mutate(norm_val = (val-min(val, na.rm = T)) / (max(val, na.rm = T) - min(val, na.rm = T)),
-         yval = match(metric, names(countries)[c(-1, -2)])) %>% 
+         yval = match(metric, names(countries_data)[c(-1, -2)])) %>% 
   arrange(metric, desc(norm_val)) %>% 
   ungroup()
 
